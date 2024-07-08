@@ -10,7 +10,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Log environment variables (excluding sensitive information)
 console.log('Environment variables:', {
   SMTP_HOST: process.env.SMTP_HOST ? 'Set' : 'Not set',
   SMTP_PORT: process.env.SMTP_PORT,
@@ -20,27 +19,25 @@ console.log('Environment variables:', {
   OPENAI_API_KEY: process.env.OPENAI_API_KEY ? 'Set' : 'Not set'
 });
 
-// Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Initialize Sequelize
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: 'database.sqlite'
 });
 
-// Define Conversation model
+
 const Conversation = sequelize.define('Conversation', {
   userId: DataTypes.STRING,
   messages: DataTypes.TEXT
 });
 
-// Sync database
+
 sequelize.sync();
 
-// Configure Nodemailer
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
@@ -51,7 +48,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Function to send email
+
 async function sendBookingConfirmationEmail(booking) {
   const msg = {
     from: process.env.FROM_EMAIL,
@@ -216,7 +213,7 @@ async function bookRoom(args) {
     
     return {
       ...bookingResult,
-      bookingId: bookingResult.bookingId, // Ensure this is returned from the API
+      bookingId: bookingResult.bookingId, 
       roomId: args.roomId,
       fullName: args.fullName,
       email: args.email,
