@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astral Oasis Hotel Booking</title>
+    <link href="logo.png" rel="icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --chat-background: #ffffff;
+            --user-message-color: #e8f4fd;
+            --bot-message-color: #f0f3f4;
+            --text-color: #34495e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--chat-background);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            font-weight: 500;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-color) var(--chat-background);
+        }
+
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-container::-webkit-scrollbar-track {
+            background: var(--chat-background);
+        }
+
+        #chat-container::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-color);
+            border-radius: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            max-width: 85%;
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: var(--user-message-color);
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot-message {
+            background: linear-gradient(to right, var(--bot-message-color), #ffffff);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .bot-message p {
+            margin-bottom: 10px;
+        }
+
+        .bot-message ul, .bot-message ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .bot-message code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .bot-message pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .bot-message h1 {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .bot-message h1:hover {
+            color: var(--secondary-color);
+        }
+
+        .bot-message ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+
+        .bot-message ul li:before {
+            content: "•";
+            color: var(--primary-color);
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .room-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .room-info p {
+            margin-bottom: 8px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            background-color: var(--background-color);
+            border-top: 1px solid #dee2e6;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        #user-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25);
+        }
+
+        #send-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        #send-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .loading-message {
+            background-color: var(--bot-message-color);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            margin: 0 3px;
+            opacity: 0;
+            animation: loadingDots 1.4s infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loadingDots {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        @keyframes titleFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1 {
+            animation: titleFadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                height: 95vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Astral Oasis Hotel Booking</h1>
+        </header>
+        <div id="chat-container"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Ask about room availability or booking...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        let userId = 'user-' + Math.random().toString(36).substr(2, 9);
+
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender.toLowerCase() + '-message');
+            
+            if (sender.toLowerCase() === 'bot') {
+                messageElement.innerHTML = marked.parse(message);
+                messageElement.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                });
+            } else {
+                messageElement.textContent = message;
+            }
+            
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addLoadingMessage() {
+            const loadingElement = document.createElement('div');
+            loadingElement.classList.add('loading-message');
+            loadingElement.innerHTML = `
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            chatContainer.appendChild(loadingElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return loadingElement;
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage('user', message);
+                userInput.value = '';
+
+                const loadingElement = addLoadingMessage();
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message, userId }),
+                    });
+
+                    const data = await response.json();
+                    loadingElement.remove();
+                    addMessage('bot', data.response);
+                } catch (error) {
+                    console.error('Error:', error);
+                    loadingElement.remove();
+                    addMessage('bot', 'Sorry, an error occurred. Please try again.');
+                }
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Add initial greeting message
+        window.addEventListener('load', () => {
+            addMessage('bot', `# Welcome to Astral Oasis Hotel Booking
+
+I'm your virtual assistant. How can I help you today?
+
+You can ask about:
+- Room availability
+- Room types and amenities
+- Booking a room
+
+Feel free to ask any questions!`);
+        });
+    </script>
+</body>
+</html>
