@@ -1,54 +1,114 @@
-# Simplified Hotel Booking Chatbot
+# Chatbot Hotel Booking System
 
-This project aims to develop a RESTful API using Express.js to power a chatbot capable of handling hotel booking queries. The chatbot leverages OpenAI's API for natural language processing to understand and respond to user queries effectively. It also maintains a conversation history to provide a seamless user experience throughout the booking process.
+This is a chatbot-based hotel booking system built with Node.js, Express, Sequelize (SQLite), OpenAI, and Nodemailer. The chatbot assists users in booking hotel rooms by providing available room options and sending booking confirmation emails.
 
-## Objective
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Environment Variables](#environment-variables)
+- [Endpoints](#endpoints)
+- [Dependencies](#dependencies)
+- [License](#license)
 
-To create a chatbot that can handle queries related to booking hotel rooms, providing a list of options, pricing information, and booking confirmation through a RESTful API.
+## Installation
 
-## Technical Requirements
+To set up and run this project locally, follow these steps:
 
-1. **Express.js**: The server framework used to build the API.
-2. **OpenAI API**: For processing natural language queries and generating responses.
-3. **SQLite & Sequelize**: For storing conversation history and booking details.
-4. **Function Calling**: To fetch room data and simulate booking processes.
-
-## Main Endpoint
-
-- `POST /chat`: Receives user messages and returns chatbot responses.
-
-## Chatbot Flow
-
-1. **Initiation**: User starts a conversation about booking a room.
-2. **Room Options**: The bot fetches and presents room options.
-3. **Selection**: User selects a preferred room.
-4. **Pricing Information**: Bot provides the cost details.
-5. **Booking Confirmation**: User agrees to book, and the bot simulates booking the room, returning a confirmation ID.
-
-## Skills Tested
-
-- Building a RESTful API with Express.js.
-- Integrating OpenAI's API for natural language understanding.
-- Maintaining conversation history.
-- Simulating external API interactions for room bookings.
-
-## Bonus Features
-
-- Basic error handling for unexpected user inputs or API errors.
-- A simple frontend interface for interacting with the chatbot.
-
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-- OpenAI API key
-
-### Installation
-
-1. Clone the repository:
-
+### 1. Clone the Repository
+Clone the repository to your local machine using the following command:
 ```bash
-git clone https://github.com/your_username/hotel-booking-chatbot.git
+git clone https://github.com/CodeMaverick2/BOT9.git
+```
 
+### 2. Navigate to the Project Directory
+```bash
+cd BOT9
+```
+
+### 3. Install Dependencies
+Install the necessary dependencies using npm:
+```bash
+npm install dotenv express nodemailer nodemon openai sequelize sqlite3 validator
+```
+
+### 4. Set Up Environment Variables
+Create a `.env` file in the root directory of the project and add the necessary environment variables. Here is an example `.env` file:
+
+```env
+PORT=3000
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=tejasghatule12345@gmail.com
+SMTP_PASS=ypjx sazh xoeu ntaw
+FROM_EMAIL=tejasghatule12345@gmail.com
+OPENAI_API_KEY=your-openai-api-key
+```
+
+Replace the placeholder values with your actual configuration.
+
+## Usage
+
+### 1. Start the Server
+Start the server in development mode:
+```bash
+npm run dev
+```
+The server will be running on `http://localhost:3000`.
+
+### 2. Access the Application
+Open your web browser and navigate to `http://localhost:3000` to interact with the chatbot.
+
+## Environment Variables
+
+The following environment variables need to be set in the `.env` file:
+
+- `PORT`: The port number on which the server will run.
+- `SMTP_HOST`: The SMTP host for sending emails (e.g., `smtp.gmail.com`).
+- `SMTP_PORT`: The SMTP port for sending emails (e.g., `587`).
+- `SMTP_SECURE`: Whether to use secure SMTP (true/false).
+- `SMTP_USER`: The SMTP user for sending emails (e.g., `tejasghatule12345@gmail.com`).
+- `SMTP_PASS`: The SMTP password for sending emails.
+- `FROM_EMAIL`: The email address from which booking confirmation emails will be sent (e.g., `tejasghatule12345@gmail.com`).
+- `OPENAI_API_KEY`: Your OpenAI API key.
+
+## Endpoints
+
+### POST /chat
+Handles the chatbot interactions.
+
+#### Request Body
+```json
+{
+  "message": "User's message",
+  "userId": "Unique user identifier"
+}
+```
+
+#### Response
+```json
+{
+  "response": "Chatbot's response"
+}
+```
+
+## Dependencies
+
+To install the required dependencies, run the following command:
+```bash
+npm install dotenv express nodemailer nodemon openai sequelize sqlite3 validator
+```
+
+List of dependencies:
+- **dotenv**: ^16.4.5
+- **express**: ^4.19.2
+- **nodemailer**: ^6.9.14
+- **nodemon**: ^3.1.4
+- **openai**: ^4.52.3
+- **sequelize**: ^6.37.3
+- **sqlite3**: ^5.1.7
+- **validator**: ^13.12.0
+
+## License
+
+This project is licensed under the ISC License.
