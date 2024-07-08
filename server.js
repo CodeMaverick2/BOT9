@@ -73,7 +73,7 @@ Important Information:
 - Check-out time: 11:00 AM
 - Please bring a valid ID and the credit card used for booking
 
-If you need to make any changes to your reservation or have any questions, please don't hesitate to contact us at our front desk number: +1 (555) 123-4567.
+If you need to make any changes to your reservation or have any questions, please don't hesitate to contact us at our front desk number: +91 8766081731.
 
 We look forward to welcoming you and ensuring you have a wonderful stay with us!
 
