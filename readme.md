@@ -2,6 +2,8 @@
 
 This is a chatbot-based hotel booking system built with Node.js, Express, Sequelize (SQLite), OpenAI, and Nodemailer. The chatbot assists users in booking hotel rooms by providing available room options and sending booking confirmation emails.
 
+Demo - https://drive.google.com/file/d/1ThACTHVWWozlBa-_nOPFD0uXdl71NsrG/view
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
